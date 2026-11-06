@@ -1,6 +1,6 @@
 # DevConnect
 
-DevConnect is a small developer community app concept built with HTML, CSS, and vanilla JavaScript. It is designed as a course project: the pages are easy to explore, the main interactions work in the browser, and no build tools or server are required.
+DevConnect is a small developer community app concept built with HTML, CSS, and vanilla JavaScript. Its warm editorial design uses a CSS-built architectural hero and a project gallery, with the community workspace and interactions running directly in the browser.
 
 ## Run locally
 
@@ -17,6 +17,7 @@ To try the full account flow, create an account, choose **My profile → Log out
 ## What’s included
 
 - A responsive landing page with sign-up, login, and community preview actions
+- A blush-and-cream visual theme, serif display typography, and an illustrated architectural hero scene
 - Sign-up and login forms with name, email, and password validation
 - A developer feed with update, code, and project posts
 - Like, comment, and share interactions

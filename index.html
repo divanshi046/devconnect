@@ -3,13 +3,13 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#10121b">
+  <meta name="theme-color" content="#f7f1ec">
   <meta name="description" content="DevConnect is a friendly place to share projects, find teammates, and meet developers.">
   <title>DevConnect — Build together</title>
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;1,500;1,600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -17,7 +17,8 @@
     <header class="landing-nav wrap">
       <a class="brand" href="#home" aria-label="DevConnect home"><span class="brand-mark">&lt;/&gt;</span> devconnect<span class="brand-dot">.</span></a>
       <nav class="landing-links" aria-label="Main navigation">
-        <a href="#why">Why DevConnect</a>
+        <a href="#home">Index</a>
+        <a href="#why">Projects</a>
         <a href="#community">Community</a>
       </nav>
       <div class="landing-actions">
@@ -27,37 +28,37 @@
     </header>
 
     <main>
-      <section class="hero wrap" id="home">
+      <section class="hero" id="home">
         <div class="hero-copy">
-          <div class="eyebrow"><span class="live-dot"></span> YOUR NEXT COLLABORATION STARTS HERE</div>
-          <h1>Good things<br>happen when<br><span>devs connect.</span></h1>
-          <p class="hero-description">A home for curious developers to share what they’re building, find their people, and make the next idea real.</p>
+          <div class="eyebrow"><span class="live-dot"></span> A COMMUNITY FOR PEOPLE WHO BUILD</div>
+          <h1>The next great thing<br><span>starts with hello.</span></h1>
+          <p class="hero-description">Find your people, share the work in progress, and make the next idea real together.</p>
           <div class="hero-buttons">
-            <button class="button button-primary button-large" data-auth="signup">Create your free profile <span aria-hidden="true">↗</span></button>
-            <button class="button button-outline button-large" data-enter-community>Explore the community <span aria-hidden="true">→</span></button>
+            <button class="button button-primary button-large" data-enter-community>View the community <span aria-hidden="true">↗</span></button>
+            <button class="button button-outline button-large" data-auth="signup">Create your profile</button>
           </div>
-          <div class="social-proof"><div class="avatar-stack"><span class="mini-avatar av-coral">AR</span><span class="mini-avatar av-blue">JM</span><span class="mini-avatar av-green">SK</span><span class="mini-avatar av-yellow">+4</span></div><span><strong>2,400+</strong> developers building together</span></div>
         </div>
-        <div class="hero-art" aria-label="A preview of the DevConnect developer community">
-          <div class="orbit orbit-one"></div><div class="orbit orbit-two"></div>
-          <div class="floating-tag tag-top"><span class="tag-icon">✳</span> Open to collab</div>
-          <div class="floating-tag tag-side"><span class="tag-icon green">↗</span> New project shipped</div>
-          <article class="preview-card profile-preview">
-            <div class="preview-cover"></div>
-            <div class="preview-profile-row"><div class="profile-avatar av-lavender">MC</div><span class="online-indicator"></span><span class="preview-follow">+ Follow</span></div>
-            <h3>Maya Chen <span class="verified">✓</span></h3><p class="preview-role">Full-stack developer · Toronto</p>
-            <p class="preview-bio">Making tools that make the internet a little more human.</p>
-            <div class="skill-row"><span>React</span><span>TypeScript</span><span>Node.js</span></div>
-            <div class="preview-divider"></div><div class="preview-stats"><span><strong>14</strong> projects</span><span><strong>820</strong> followers</span><span class="github-mini">⌘ GitHub</span></div>
-          </article>
-          <div class="code-chip"><span class="code-chip-dot"></span><span>shipping something<br>new today <b>✨</b></span><span class="chip-arrow">↗</span></div>
-          <div class="hero-spark spark-one">✳</div><div class="hero-spark spark-two">✦</div>
+        <div class="hero-art" role="img" aria-label="A warm architectural scene with arches, steps, and a reflective pool">
+          <div class="architect-scene" aria-hidden="true">
+            <div class="scene-sky"></div><div class="scene-wall"></div>
+            <div class="scene-arch arch-back"><div class="arch-view arch-view-back"></div></div>
+            <div class="scene-arch arch-front"><div class="arch-view arch-view-front"></div></div>
+            <div class="scene-window"></div><div class="scene-stairs"></div>
+            <div class="scene-orb"></div><div class="scene-stone"></div>
+            <div class="scene-water"></div><div class="scene-water-ripple ripple-one"></div><div class="scene-water-ripple ripple-two"></div>
+          </div>
+          <div class="scene-label"><span>DEVCONNECT COMMUNITY</span><span>OPEN TO WHAT’S NEXT <b>↗</b></span></div>
+          <div class="hero-scroll">SCROLL TO EXPLORE <span>↓</span></div>
         </div>
       </section>
       <section class="marquee-band" id="community"><div class="wrap marquee-content"><span>BUILD IN PUBLIC</span><i>✳</i><span>FIND YOUR PEOPLE</span><i>✳</i><span>SHARE WHAT YOU KNOW</span><i>✳</i><span>SHIP TOGETHER</span><i>✳</i><span>BUILD IN PUBLIC</span></div></section>
       <section class="why-section wrap" id="why">
-        <div><div class="eyebrow">MORE THAN A NETWORK</div><h2>Your corner of<br>the internet to <span>build.</span></h2><p>Less scrolling past strangers. More conversations with people who get why you’re excited about that side project.</p></div>
-        <div class="feature-grid"><article class="feature-card feature-peach"><div class="feature-icon">↗</div><h3>Show your work</h3><p>Share the messy middle, the launch, and everything you learned along the way.</p></article><article class="feature-card feature-lilac"><div class="feature-icon">⌘</div><h3>Find your people</h3><p>Meet developers who share your tools, curiosity, and unreasonable project ideas.</p></article><article class="feature-card feature-mint"><div class="feature-icon">✳</div><h3>Make it together</h3><p>Find a teammate, trade feedback, or turn a coffee chat into a real collaboration.</p></article></div>
+        <div class="why-intro"><div class="eyebrow">A LITTLE MORE HUMAN</div><h2>Good work grows<br>better <span>together.</span></h2><p>Less scrolling past strangers. More conversations with people who get why you’re excited about that side project.</p><button class="text-link" data-enter-community>Meet the community <span>↗</span></button></div>
+        <div class="feature-grid">
+          <article class="feature-card feature-peach"><div class="feature-art feature-art-one"><div class="art-browser"><span></span><span></span><span></span><b>tiny wins, every day</b><i>✳</i></div></div><div class="feature-index">01 / MAKE</div><h3>Show your work</h3><p>Share the messy middle, the launch, and everything you learned along the way.</p></article>
+          <article class="feature-card feature-lilac"><div class="feature-art feature-art-two"><div class="art-orbit"></div><div class="art-people"><span>AR</span><span>MC</span><span>SK</span></div><b>good people<br>make good things</b></div><div class="feature-index">02 / MEET</div><h3>Find your people</h3><p>Meet developers who share your tools, curiosity, and unreasonable project ideas.</p></article>
+          <article class="feature-card feature-mint"><div class="feature-art feature-art-three"><div class="art-terminal"><span>~/weekend-project</span><b>let's build<br>something good<span>_</span></b><i>✳</i></div></div><div class="feature-index">03 / MAKE TOGETHER</div><h3>Make it together</h3><p>Find a teammate, trade feedback, or turn a coffee chat into a real collaboration.</p></article>
+        </div>
       </section>
       <footer class="landing-footer wrap"><a class="brand" href="#home"><span class="brand-mark">&lt;/&gt;</span> devconnect<span class="brand-dot">.</span></a><span>A little more human. A lot more collaborative.</span><span>Made for the makers <span class="footer-heart">♥</span></span></footer>
     </main>

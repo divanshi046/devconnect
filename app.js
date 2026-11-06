@@ -234,10 +234,20 @@ document.addEventListener('change',event=>{
     const role=event.target.value;document.querySelectorAll('.person-card').forEach(card=>{const text=card.querySelector('.person-role')?.textContent.toLowerCase()||'';card.classList.toggle('hidden',role!=='all'&&!text.includes(role));});
   }
 });
-document.querySelector('.theme-toggle').addEventListener('click',()=>{document.body.classList.toggle('light-theme');localStorage.setItem(THEME_KEY,document.body.classList.contains('light-theme')?'light':'dark');});
+document.querySelector('.theme-toggle').addEventListener('click',()=>{
+  const isLight=document.body.classList.toggle('light-theme');
+  document.body.classList.toggle('dark-theme',!isLight);
+  localStorage.setItem(THEME_KEY,isLight?'light':'dark');
+  document.querySelector('.theme-toggle').textContent=isLight?'☾':'☼';
+  document.querySelector('.theme-toggle').setAttribute('aria-label',`Switch to ${isLight?'dark':'light'} theme`);
+});
 document.getElementById('account-button').addEventListener('click',()=>{if(document.getElementById('app').classList.contains('hidden'))return;setMode('profile');});
 document.addEventListener('keydown',event=>{if((event.metaKey||event.ctrlKey)&&event.key.toLowerCase()==='k'){event.preventDefault();if(document.getElementById('app').classList.contains('hidden'))enterCommunity();currentView='explore';renderView();document.querySelectorAll('[data-view]').forEach(el=>el.classList.toggle('active',el.dataset.view==='explore'));document.getElementById('explore-search')?.focus();}if(event.key==='Escape')closeAuth();});
 
-if(localStorage.getItem(THEME_KEY)==='light')document.body.classList.add('light-theme');
+const savedTheme=localStorage.getItem(THEME_KEY);
+const isLightTheme=savedTheme!=='dark';
+document.body.classList.toggle('light-theme',isLightTheme);
+document.body.classList.toggle('dark-theme',!isLightTheme);
+document.querySelector('.theme-toggle').textContent=isLightTheme?'☾':'☼';
 // A saved session goes straight to the community; first-time visitors see the landing page.
 if(data.currentUser&&data.users.some(user=>user.id===data.currentUser))enterCommunity();
