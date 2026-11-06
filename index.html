@@ -10,6 +10,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;1,500;1,600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -68,7 +69,7 @@
     <header class="app-topbar">
       <a class="brand" href="#home" data-home><span class="brand-mark">&lt;/&gt;</span> devconnect<span class="brand-dot">.</span></a>
       <div class="top-search"><span>⌕</span><input id="global-search" type="search" placeholder="Search developers, skills, projects..." aria-label="Search developers"><kbd>⌘ K</kbd></div>
-      <div class="topbar-right"><button class="icon-button theme-toggle" aria-label="Toggle color theme" title="Toggle theme">☼</button><button class="button button-primary top-create" data-action="focus-composer">＋ <span>New post</span></button><button id="account-button" class="account-button" aria-label="Open your profile">JD</button></div>
+      <div class="topbar-right"><div class="notification-wrap"><button id="notification-button" class="icon-button notification-button" data-feature-action="notifications-toggle" aria-label="Open notifications" aria-expanded="false" title="Notifications">♧<span id="notification-count" class="notification-count hidden">0</span></button><div id="notification-popover" class="notification-popover hidden"></div></div><button class="icon-button theme-toggle" aria-label="Toggle color theme" title="Toggle theme">☼</button><button class="button button-primary top-create" data-action="focus-composer">＋ <span>New post</span></button><button id="account-button" class="account-button" aria-label="Open your profile">JD</button></div>
     </header>
     <div class="app-layout">
       <aside class="sidebar">
@@ -78,6 +79,7 @@
           <button class="side-link" data-view="explore"><span class="nav-icon">⌕</span> Explore</button>
           <button class="side-link" data-view="connections"><span class="nav-icon">♧</span> Connections <span class="nav-count" id="connection-count">0</span></button>
           <button class="side-link" data-view="messages"><span class="nav-icon">▤</span> Messages <span class="unread-dot"></span></button>
+          <button class="side-link" data-view="teams"><span class="nav-icon">⌘</span> Team finder <span class="nav-count" id="team-request-count">0</span></button>
         </nav>
         <div class="sidebar-label projects-label">YOUR SPACE</div>
         <nav class="side-nav"><button class="side-link" data-view="profile"><span class="nav-icon">◎</span> My profile</button><button class="side-link" data-view="projects"><span class="nav-icon">◈</span> Projects</button></nav>
@@ -87,7 +89,7 @@
       <main class="workspace-main"><div id="view-root"></div></main>
       <aside class="right-rail" id="right-rail"></aside>
     </div>
-    <nav class="mobile-nav" aria-label="Mobile navigation"><button class="active" data-view="feed"><span>◫</span>Home</button><button data-view="explore"><span>⌕</span>Explore</button><button data-view="connections"><span>♧</span>People</button><button data-view="messages"><span>▤</span>Chat</button><button data-view="profile"><span>◎</span>Profile</button></nav>
+    <nav class="mobile-nav" aria-label="Mobile navigation"><button class="active" data-view="feed"><span>◫</span>Home</button><button data-view="explore"><span>⌕</span>Explore</button><button data-view="teams"><span>⌘</span>Teams</button><button data-view="messages"><span>▤</span>Chat</button><button data-view="profile"><span>◎</span>Profile</button></nav>
   </div>
 
   <div id="auth-modal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="auth-title">
@@ -107,6 +109,10 @@
     </section>
   </div>
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
-  <script src="app.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
+  <script src="features.js" defer></script>
+  <script src="app.js" defer></script>
 </body>
 </html>

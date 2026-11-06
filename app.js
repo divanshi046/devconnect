@@ -16,13 +16,24 @@ const seedData = {
   following: ['maya','arjun','sam'],
   posts: [
     {id:'p1', userId:'maya', kind:'update', time:'12 min ago', text:'Spent the morning making our empty state feel a little less empty. It’s wild how one small illustration can change the whole mood of a screen. Sharing the tiny before & after below ✨', tags:['#buildinpublic','#uidesign'], likedBy:['jordan'], comments:[{userId:'sam',text:'The small details are always the ones people remember!'}]},
-    {id:'p2', userId:'arjun', kind:'code', time:'48 min ago', text:'A tiny Python helper for cleaning up those slightly chaotic CSV headers. Future me says thanks.', tags:['#python','#todayilearned'], code:'def clean_headers(columns):\n    return [\n        col.strip().lower().replace(" ", "_")\n        for col in columns\n    ]', likedBy:[], comments:[]},
+    {id:'p2', userId:'arjun', kind:'code', language:'python', time:'48 min ago', text:'A tiny Python helper for cleaning up those slightly chaotic CSV headers. Future me says thanks.', tags:['#python','#todayilearned'], code:'def clean_headers(columns):\n    return [\n        col.strip().lower().replace(" ", "_")\n        for col in columns\n    ]', likedBy:[], comments:[]},
     {id:'p3', userId:'sam', kind:'project', time:'2 hours ago', text:'Just shipped a small side project I’ve been tinkering with for the last couple of weekends. It started as a tool I wanted for myself, and a few friends asked to try it. Would love some kind feedback!', tags:['#sideproject','#feedbackwanted'], project:{name:'Tiny Type',description:'A friendly little playground for pairing fonts. Pick a mood, find a type duo, and get back to making.',icon:'Aa'}, likedBy:['jordan','maya'], comments:[{userId:'maya',text:'This is lovely. The playful previews are such a nice touch!'}]}
   ],
   messages: {
     maya:[{from:'maya',text:'Hey Jordan! I saw your Color Club post. The shared palette idea is so good.',time:'10:42 AM'},{from:'jordan',text:'Thank you! I’m trying to make it useful for small teams, not just designers.',time:'10:46 AM'},{from:'maya',text:'Would you be up for a quick feedback swap this week?',time:'10:47 AM'}],
     arjun:[{from:'arjun',text:'Your Focus Garden project is such a nice idea. Do you have plans to open source it?',time:'Yesterday'},{from:'jordan',text:'I’m cleaning things up now, actually. I’ll share the repo when it’s ready!',time:'Yesterday'}]
-  }
+  },
+  teams:[
+    {id:'team-civic-lens',ownerId:'arjun',title:'Civic Lens',description:'Turn open city data into a friendly map that helps residents find local resources.',skillsNeeded:['React','Python','Data visualization'],lookingFor:2,createdAt:'Today'},
+    {id:'team-open-studio',ownerId:'jordan',title:'Open Studio Weekend',description:'A small, welcoming team to ship a tiny creative tool during the next hackathon.',skillsNeeded:['UX research','React','Accessibility'],lookingFor:2,createdAt:'Yesterday'}
+  ],
+  teamRequests:[
+    {id:'request-maya-open-studio',teamId:'team-open-studio',userId:'maya',status:'pending',createdAt:'12 min ago'}
+  ],
+  notifications:[
+    {id:'notification-follow-sam',type:'follow',actorId:'sam',text:'Sam Kim started following your work.',read:false,createdAt:'10 min ago'},
+    {id:'notification-team-maya',type:'team',actorId:'maya',text:'Maya Chen wants to join Open Studio Weekend.',read:false,createdAt:'12 min ago',requestId:'request-maya-open-studio',teamId:'team-open-studio'}
+  ]
 };
 
 let data = loadData();
@@ -34,13 +45,24 @@ let activeConversation = 'maya';
 let editingProfile = false;
 let openComments = new Set();
 let toastTimer;
+let githubChart=null;
+let githubLoadKey='';
 
 function loadData(){
   try {
     const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
-    if(saved && Array.isArray(saved.users) && Array.isArray(saved.posts)) return {...structuredClone(seedData),...saved};
+    if(saved && Array.isArray(saved.users) && Array.isArray(saved.posts)){
+      const migrated={...structuredClone(seedData),...saved};
+      migrated.teams=Array.isArray(saved.teams)?saved.teams:structuredClone(seedData.teams);
+      migrated.teamRequests=Array.isArray(saved.teamRequests)?saved.teamRequests:structuredClone(seedData.teamRequests);
+      migrated.notifications=Array.isArray(saved.notifications)?saved.notifications:structuredClone(seedData.notifications);
+      migrated.users=migrated.users.map(user=>({...user,skillLevels:user.skillLevels||defaultSkillLevels(user.skills||[])}));
+      return migrated;
+    }
   } catch(error) { console.warn('Could not read saved DevConnect data.', error); }
-  return structuredClone(seedData);
+  const initial=structuredClone(seedData);
+  initial.users=initial.users.map(user=>({...user,skillLevels:user.skillLevels||defaultSkillLevels(user.skills||[])}));
+  return initial;
 }
 function saveData(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); }
 function userById(id){ return data.users.find(user=>user.id===id) || data.users[0]; }
@@ -49,6 +71,40 @@ function esc(value=''){ return String(value).replace(/[&<>"']/g,char=>({'&':'&am
 function safeExternalUrl(value=''){try{const url=new URL(value);return ['http:','https:'].includes(url.protocol)?url.href:'';}catch{return '';}}
 function initials(name=''){ return name.trim().split(/\s+/).slice(0,2).map(part=>part[0]||'').join('').toUpperCase() || 'DC'; }
 function avatar(user, extra=''){ return `<div class="profile-avatar ${esc(user.palette||'av-lavender')} ${extra}">${esc(initials(user.name))}</div>`; }
+function defaultSkillLevels(skills){return Object.fromEntries(skills.map((skill,index)=>[skill,index===0?'Pro':index===1?'Intermediate':'Beginner']));}
+function normalizedSkills(skills){return [...new Set((skills||[]).map(skill=>String(skill).trim().toLowerCase()).filter(Boolean))];}
+function skillMatchScore(first,second){
+  const a=normalizedSkills(first.skills),b=normalizedSkills(second.skills);
+  if(!a.length||!b.length)return 0;
+  const overlap=a.filter(skill=>b.includes(skill)).length;
+  return Math.round(overlap/(new Set([...a,...b]).size||1)*100);
+}
+function matchNeededSkills(user,skills){
+  const mine=normalizedSkills(user.skills),needed=normalizedSkills(skills);
+  if(!needed.length)return 0;
+  return Math.round(needed.filter(skill=>mine.includes(skill)).length/needed.length*100);
+}
+function profileCompleteness(user){
+  const githubLink=String(user.github||'').replace(/\/$/,'');
+  const checks=[
+    Boolean(user.name&&user.role),Boolean(user.bio&&user.bio.length>15),Boolean(user.location),
+    Boolean(user.skills?.length),Boolean(user.githubUsername||(safeExternalUrl(githubLink)&&githubLink.toLowerCase()!=='https://github.com')),Boolean(user.projects?.length)
+  ];
+  return Math.round(checks.filter(Boolean).length/checks.length*100);
+}
+function achievementBadges(user){
+  return [
+    {title:'First Project',icon:'✳',earned:(user.projects||[]).length>0,detail:'Added a project to your profile'},
+    {title:'Team Player',icon:'⌘',earned:data.teamRequests.some(request=>request.userId===user.id&&request.status==='accepted')||data.teams.some(team=>team.ownerId===user.id),detail:'Joined or started a collaboration'},
+    {title:'Code Contributor',icon:'⌁',earned:data.posts.some(post=>post.userId===user.id&&post.kind==='code'),detail:'Shared a code snippet'},
+    {title:'Community Spark',icon:'♡',earned:data.posts.some(post=>post.userId===user.id),detail:'Shared your first update'}
+  ];
+}
+function addNotification(notification){
+  data.notifications=data.notifications||[];
+  data.notifications.unshift({id:'n'+Date.now()+Math.floor(Math.random()*99),read:false,createdAt:'just now',...notification});
+  saveData();updateUserChrome();
+}
 function setMode(view){
   currentView=view;
   document.querySelectorAll('[data-view]').forEach(el=>el.classList.toggle('active',el.dataset.view===view));
@@ -68,15 +124,22 @@ function updateUserChrome(){
   document.getElementById('sidebar-name').textContent=user.name;
   document.getElementById('sidebar-handle').textContent=`@${user.handle}`;
   document.getElementById('connection-count').textContent=data.following.length;
+  const unread=(data.notifications||[]).filter(item=>!item.read).length;
+  const badge=document.getElementById('notification-count');
+  if(badge){badge.textContent=unread>9?'9+':unread;badge.classList.toggle('hidden',!unread);}
+  const pending=(data.teamRequests||[]).filter(request=>request.status==='pending'&&data.teams.some(team=>team.id===request.teamId&&team.ownerId===user.id)).length;
+  const teamBadge=document.getElementById('team-request-count');
+  if(teamBadge){teamBadge.textContent=pending;teamBadge.classList.toggle('hidden',!pending);}
 }
 function pageHeading(title,subtitle,extra=''){return `<div class="page-heading"><div><h1>${title}</h1><p>${subtitle}</p></div>${extra}</div>`;}
 function projectCard(project){return `<article class="project-card"><div class="project-thumb ${esc(project.color||'')}" aria-hidden="true">${esc(project.icon||'◈')}</div><h3>${esc(project.name)}</h3><p>${esc(project.description)}</p><div class="person-skills">${(project.skills||[]).map(skill=>`<span>${esc(skill)}</span>`).join('')}</div></article>`;}
 function renderFeed(){
   const meUser=me();
-  const composer=`<section class="composer"><div class="composer-top">${avatar(meUser,'small-avatar')}<textarea id="post-text" placeholder="What are you building, ${esc(meUser.name.split(' ')[0])}?" aria-label="Write a post"></textarea></div><div class="composer-tools"><div class="composer-kind"><button class="kind-button ${postKind==='update'?'selected':''}" data-kind="update"><span>✳</span>Update</button><button class="kind-button ${postKind==='code'?'selected':''}" data-kind="code"><span>⌘</span>Code</button><button class="kind-button ${postKind==='project'?'selected':''}" data-kind="project"><span>◈</span>Project</button></div><button class="button button-primary post-button" data-action="publish">Share post <span>↗</span></button></div></section>`;
+  const languagePicker=postKind==='code'?`<label class="code-language-label">Language<select id="code-language" aria-label="Code language"><option value="javascript">JavaScript</option><option value="python">Python</option><option value="html">HTML</option><option value="css">CSS</option><option value="json">JSON</option><option value="bash">Bash</option></select></label>`:'';
+  const composer=`<section class="composer"><div class="composer-top">${avatar(meUser,'small-avatar')}<textarea id="post-text" placeholder="What are you building, ${esc(meUser.name.split(' ')[0])}?" aria-label="Write a post"></textarea></div><div class="composer-tools"><div class="composer-kind"><button class="kind-button ${postKind==='update'?'selected':''}" data-kind="update"><span>✳</span>Update</button><button class="kind-button ${postKind==='code'?'selected':''}" data-kind="code"><span>⌘</span>Code</button><button class="kind-button ${postKind==='project'?'selected':''}" data-kind="project"><span>◈</span>Project</button></div>${languagePicker}<button class="button button-primary post-button" data-action="publish">Share post <span>↗</span></button></div></section>`;
   const posts=[...data.posts].reverse().map(post=>{
     const author=userById(post.userId); const liked=(post.likedBy||[]).includes(meUser.id); const comments=post.comments||[];
-    let body=post.kind==='code'?`<div class="code-block">${highlightCode(post.code||'')}</div>`:'';
+    let body=post.kind==='code'?`<pre class="code-block"><code class="language-${esc((post.language||'javascript').toLowerCase())}">${esc(post.code||'')}</code></pre>`:'';
     if(post.kind==='project'&&post.project) body+=`<div class="post-project"><div class="project-thumb">${esc(post.project.icon||'◈')}</div><div><strong>${esc(post.project.name)}</strong><span>${esc(post.project.description)}</span></div></div>`;
     const commentSection=openComments.has(post.id)?`<div class="comments"><div class="comment-list">${comments.map(comment=>`<div class="comment"><strong>${esc(userById(comment.userId).name)}</strong>${esc(comment.text)}</div>`).join('')}</div><form class="comment-form" data-comment-form="${esc(post.id)}"><input name="comment" placeholder="Add a thoughtful comment..." aria-label="Add comment" required><button>Reply</button></form></div>`:'';
     return `<article class="post-card" data-post="${esc(post.id)}"><div class="post-author">${avatar(author)}<div class="author-meta"><div class="author-line"><strong>${esc(author.name)}</strong><span class="verified">✓</span><span class="author-handle">@${esc(author.handle)}</span></div><div class="author-handle">${esc(author.role)}</div></div><span class="post-time">${esc(post.time||'just now')} · · ·</span></div><p class="post-text">${esc(post.text)}</p>${body}<div class="post-tags">${(post.tags||[]).map(tag=>`<span>${esc(tag)}</span>`).join('')}</div><div class="post-actions"><button class="post-action ${liked?'liked':''}" data-action="like" data-id="${esc(post.id)}">${liked?'♥':'♡'} ${liked?'Liked':'Like'} · ${(post.likedBy||[]).length}</button><button class="post-action" data-action="comments" data-id="${esc(post.id)}">▤ ${comments.length} comments</button><button class="post-action" data-action="share" data-id="${esc(post.id)}">↗ Share</button></div>${commentSection}</article>`;
@@ -127,9 +190,14 @@ function renderMessages(){
 }
 function renderView(){
   const root=document.getElementById('view-root');
-  const renderers={feed:renderFeed,explore:renderExplore,connections:renderConnections,profile:renderProfile,projects:renderProjects,messages:renderMessages};
+  const renderers={feed:renderFeed,explore:renderExplore,connections:renderConnections,profile:renderProfile,projects:renderProjects,messages:renderMessages,teams:renderTeamsFeature};
   root.innerHTML=(renderers[currentView]||renderFeed)();
   renderRail();
+  if(currentView==='feed')enhanceFeedView();
+  if(currentView==='profile')enhanceProfilePage();
+  if(currentView==='explore')enhanceExploreMatches();
+  enhanceRightRail();
+  if(window.Prism)window.Prism.highlightAllUnder(root);
   if(currentView==='messages'){const box=document.getElementById('conversation-body');if(box)box.scrollTop=box.scrollHeight;}
 }
 function renderRail(){
@@ -153,13 +221,13 @@ function showToast(message){const toast=document.getElementById('toast');toast.t
 function publishPost(){
   const field=document.getElementById('post-text'); const text=field?.value.trim(); if(!text){field?.focus();showToast('Write a little something first.');return;}
   const tags=[...text.matchAll(/#[\w]+/g)].map(match=>match[0]); const post={id:`p${Date.now()}`,userId:me().id,kind:postKind,time:'just now',text:text.replace(/\s+/g,' '),tags,likedBy:[],comments:[]};
-  if(postKind==='code')post.code=text;
+  if(postKind==='code'){post.code=text;post.language=document.getElementById('code-language')?.value||'javascript';}
   if(postKind==='project')post.project={name:text.split(/[.!?]/)[0].slice(0,42)||'New project',description:text,icon:'🚀'};
   data.posts.push(post);saveData();postKind='update';renderView();showToast('Your post is live in the community ✨');
 }
 function toggleFollow(userId,shouldFollow){
   const isFollowing=data.following.includes(userId); const follow=shouldFollow??!isFollowing;
-  data.following=data.following.filter(id=>id!==userId);if(follow)data.following.push(userId);saveData();updateUserChrome();renderView();showToast(follow?`You and ${userById(userId).name.split(' ')[0]} are connected.`:'Connection removed.');
+  data.following=data.following.filter(id=>id!==userId);if(follow){data.following.push(userId);data.notifications.unshift({id:'n'+Date.now(),type:'follow',actorId:userId,text:'You connected with '+userById(userId).name+'.',read:false,createdAt:'just now'});}saveData();updateUserChrome();renderView();showToast(follow?`You and ${userById(userId).name.split(' ')[0]} are connected.`:'Connection removed.');
 }
 function selectMessage(userId){activeConversation=userId;if(!data.messages[userId])data.messages[userId]=[];currentView='messages';renderView();document.querySelectorAll('[data-view]').forEach(el=>el.classList.toggle('active',el.dataset.view==='messages'));}
 function randomPalette(){return ['avatar-coral','avatar-green','avatar-blue','avatar-yellow','avatar-pink'][Math.floor(Math.random()*5)];}
@@ -241,6 +309,7 @@ document.querySelector('.theme-toggle').addEventListener('click',()=>{
   document.querySelector('.theme-toggle').textContent=isLight?'☾':'☼';
   document.querySelector('.theme-toggle').setAttribute('aria-label',`Switch to ${isLight?'dark':'light'} theme`);
 });
+document.querySelector('.theme-toggle').addEventListener('click',()=>{setTimeout(enhanceRightRail,0);},true);
 document.getElementById('account-button').addEventListener('click',()=>{if(document.getElementById('app').classList.contains('hidden'))return;setMode('profile');});
 document.addEventListener('keydown',event=>{if((event.metaKey||event.ctrlKey)&&event.key.toLowerCase()==='k'){event.preventDefault();if(document.getElementById('app').classList.contains('hidden'))enterCommunity();currentView='explore';renderView();document.querySelectorAll('[data-view]').forEach(el=>el.classList.toggle('active',el.dataset.view==='explore'));document.getElementById('explore-search')?.focus();}if(event.key==='Escape')closeAuth();});
 

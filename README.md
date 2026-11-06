@@ -26,15 +26,33 @@ To try the full account flow, create an account, choose **My profile → Log out
 - Simple one-to-one conversations
 - Editable developer profile and project list
 - Dark and light theme toggle
-- Browser `localStorage` persistence for demo accounts, profile edits, posts, follows, comments, and messages
+- Hackathon team finder with skill-fit scores and owner accept/decline controls
+- Jaccard-style skill overlap scores on developer cards and team openings
+- GitHub username lookup for public repositories, stars, and top repository languages
+- Recent contribution calendar, profile completeness progress, skill levels, and achievement badges
+- Developer of the Week spotlight, in-app request/follow notifications, and a trending skills chart
+- Prism.js syntax highlighting for JavaScript, Python, HTML, CSS, JSON, and Bash snippets
+- Responsive team board and mobile feed widgets, with reduced-motion support
+- Browser `localStorage` persistence for demo accounts, profile edits, posts, follows, comments, messages, team requests, notifications, and synced GitHub stats
+
+## External data and libraries
+
+- GitHub repository and profile details use GitHub’s public REST API.
+- The contribution calendar uses the public [GitHub Contributions API](https://github.com/grubersjoe/github-contributions-api), which can cache results for up to an hour. If that service is unavailable, the repository and star cards still load.
+- Syntax highlighting is provided by Prism.js and the trending skills visualization by Chart.js. These libraries load from CDNs, so those enhancements need an internet connection.
+- The page makes public GitHub requests from the browser and does not need a private API token.
 
 ## Project structure
+
+The extra community workflows live in `features.js`; `favicon.svg` supplies the browser icon.
 
 ```text
 devconnect/
 ├── index.html   # Landing page and app shell
 ├── styles.css   # Responsive layout, components, and themes
 ├── app.js       # Demo data, page rendering, and interactions
+├── features.js  # Team finder, notifications, GitHub stats, and profile extras
+├── favicon.svg  # Browser tab icon
 └── README.md
 ```
 
@@ -44,6 +62,7 @@ devconnect/
 - CSS3 (Grid, Flexbox, responsive media queries)
 - Vanilla JavaScript
 - Browser localStorage
+- GitHub REST API, Prism.js, and Chart.js (loaded from CDNs)
 
 ## Deployment
 
