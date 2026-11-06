@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#10121b">
+  <meta name="description" content="DevConnect is a friendly place to share projects, find teammates, and meet developers.">
+  <title>DevConnect — Build together</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="landing" class="landing-page">
+    <header class="landing-nav wrap">
+      <a class="brand" href="#home" aria-label="DevConnect home"><span class="brand-mark">&lt;/&gt;</span> devconnect<span class="brand-dot">.</span></a>
+      <nav class="landing-links" aria-label="Main navigation">
+        <a href="#why">Why DevConnect</a>
+        <a href="#community">Community</a>
+      </nav>
+      <div class="landing-actions">
+        <button class="button button-quiet" data-auth="login">Log in</button>
+        <button class="button button-primary" data-auth="signup">Join the community <span aria-hidden="true">↗</span></button>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero wrap" id="home">
+        <div class="hero-copy">
+          <div class="eyebrow"><span class="live-dot"></span> YOUR NEXT COLLABORATION STARTS HERE</div>
+          <h1>Good things<br>happen when<br><span>devs connect.</span></h1>
+          <p class="hero-description">A home for curious developers to share what they’re building, find their people, and make the next idea real.</p>
+          <div class="hero-buttons">
+            <button class="button button-primary button-large" data-auth="signup">Create your free profile <span aria-hidden="true">↗</span></button>
+            <button class="button button-outline button-large" data-enter-community>Explore the community <span aria-hidden="true">→</span></button>
+          </div>
+          <div class="social-proof"><div class="avatar-stack"><span class="mini-avatar av-coral">AR</span><span class="mini-avatar av-blue">JM</span><span class="mini-avatar av-green">SK</span><span class="mini-avatar av-yellow">+4</span></div><span><strong>2,400+</strong> developers building together</span></div>
+        </div>
+        <div class="hero-art" aria-label="A preview of the DevConnect developer community">
+          <div class="orbit orbit-one"></div><div class="orbit orbit-two"></div>
+          <div class="floating-tag tag-top"><span class="tag-icon">✳</span> Open to collab</div>
+          <div class="floating-tag tag-side"><span class="tag-icon green">↗</span> New project shipped</div>
+          <article class="preview-card profile-preview">
+            <div class="preview-cover"></div>
+            <div class="preview-profile-row"><div class="profile-avatar av-lavender">MC</div><span class="online-indicator"></span><span class="preview-follow">+ Follow</span></div>
+            <h3>Maya Chen <span class="verified">✓</span></h3><p class="preview-role">Full-stack developer · Toronto</p>
+            <p class="preview-bio">Making tools that make the internet a little more human.</p>
+            <div class="skill-row"><span>React</span><span>TypeScript</span><span>Node.js</span></div>
+            <div class="preview-divider"></div><div class="preview-stats"><span><strong>14</strong> projects</span><span><strong>820</strong> followers</span><span class="github-mini">⌘ GitHub</span></div>
+          </article>
+          <div class="code-chip"><span class="code-chip-dot"></span><span>shipping something<br>new today <b>✨</b></span><span class="chip-arrow">↗</span></div>
+          <div class="hero-spark spark-one">✳</div><div class="hero-spark spark-two">✦</div>
+        </div>
+      </section>
+      <section class="marquee-band" id="community"><div class="wrap marquee-content"><span>BUILD IN PUBLIC</span><i>✳</i><span>FIND YOUR PEOPLE</span><i>✳</i><span>SHARE WHAT YOU KNOW</span><i>✳</i><span>SHIP TOGETHER</span><i>✳</i><span>BUILD IN PUBLIC</span></div></section>
+      <section class="why-section wrap" id="why">
+        <div><div class="eyebrow">MORE THAN A NETWORK</div><h2>Your corner of<br>the internet to <span>build.</span></h2><p>Less scrolling past strangers. More conversations with people who get why you’re excited about that side project.</p></div>
+        <div class="feature-grid"><article class="feature-card feature-peach"><div class="feature-icon">↗</div><h3>Show your work</h3><p>Share the messy middle, the launch, and everything you learned along the way.</p></article><article class="feature-card feature-lilac"><div class="feature-icon">⌘</div><h3>Find your people</h3><p>Meet developers who share your tools, curiosity, and unreasonable project ideas.</p></article><article class="feature-card feature-mint"><div class="feature-icon">✳</div><h3>Make it together</h3><p>Find a teammate, trade feedback, or turn a coffee chat into a real collaboration.</p></article></div>
+      </section>
+      <footer class="landing-footer wrap"><a class="brand" href="#home"><span class="brand-mark">&lt;/&gt;</span> devconnect<span class="brand-dot">.</span></a><span>A little more human. A lot more collaborative.</span><span>Made for the makers <span class="footer-heart">♥</span></span></footer>
+    </main>
+  </div>
+
+  <div id="app" class="app-shell hidden">
+    <header class="app-topbar">
+      <a class="brand" href="#home" data-home><span class="brand-mark">&lt;/&gt;</span> devconnect<span class="brand-dot">.</span></a>
+      <div class="top-search"><span>⌕</span><input id="global-search" type="search" placeholder="Search developers, skills, projects..." aria-label="Search developers"><kbd>⌘ K</kbd></div>
+      <div class="topbar-right"><button class="icon-button theme-toggle" aria-label="Toggle color theme" title="Toggle theme">☼</button><button class="button button-primary top-create" data-action="focus-composer">＋ <span>New post</span></button><button id="account-button" class="account-button" aria-label="Open your profile">JD</button></div>
+    </header>
+    <div class="app-layout">
+      <aside class="sidebar">
+        <div class="sidebar-label">WORKSPACE</div>
+        <nav class="side-nav" aria-label="Community pages">
+          <button class="side-link active" data-view="feed"><span class="nav-icon">◫</span> Feed <span class="nav-count">3</span></button>
+          <button class="side-link" data-view="explore"><span class="nav-icon">⌕</span> Explore</button>
+          <button class="side-link" data-view="connections"><span class="nav-icon">♧</span> Connections <span class="nav-count" id="connection-count">0</span></button>
+          <button class="side-link" data-view="messages"><span class="nav-icon">▤</span> Messages <span class="unread-dot"></span></button>
+        </nav>
+        <div class="sidebar-label projects-label">YOUR SPACE</div>
+        <nav class="side-nav"><button class="side-link" data-view="profile"><span class="nav-icon">◎</span> My profile</button><button class="side-link" data-view="projects"><span class="nav-icon">◈</span> Projects</button></nav>
+        <div class="sidebar-prompt"><div class="prompt-icon">✳</div><strong>Looking for a teammate?</strong><p>Tell the community what you’re working on.</p><button data-action="find-team" class="prompt-link">Start a project post <span>→</span></button></div>
+        <div class="sidebar-bottom"><div class="sidebar-user"><div id="sidebar-avatar" class="profile-avatar av-lavender small-avatar">JD</div><div><strong id="sidebar-name">Jordan Davis</strong><span id="sidebar-handle">@jordandavis</span></div><button class="more-button" aria-label="Account options" data-action="account-menu">···</button></div></div>
+      </aside>
+      <main class="workspace-main"><div id="view-root"></div></main>
+      <aside class="right-rail" id="right-rail"></aside>
+    </div>
+    <nav class="mobile-nav" aria-label="Mobile navigation"><button class="active" data-view="feed"><span>◫</span>Home</button><button data-view="explore"><span>⌕</span>Explore</button><button data-view="connections"><span>♧</span>People</button><button data-view="messages"><span>▤</span>Chat</button><button data-view="profile"><span>◎</span>Profile</button></nav>
+  </div>
+
+  <div id="auth-modal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="auth-title">
+    <section class="auth-card">
+      <button class="modal-close" data-close-modal aria-label="Close">×</button>
+      <a class="brand auth-brand" href="#home"><span class="brand-mark">&lt;/&gt;</span> devconnect<span class="brand-dot">.</span></a>
+      <div class="eyebrow" id="auth-eyebrow">YOUR PEOPLE ARE HERE</div><h2 id="auth-title">Make yourself<br>at <span>home.</span></h2><p class="auth-subtitle" id="auth-subtitle">Join a community that makes building feel less like a solo sport.</p>
+      <form id="auth-form" novalidate>
+        <label id="name-field" class="field hidden">Your name<input name="name" type="text" autocomplete="name" placeholder="Jordan Davis" minlength="2"></label>
+        <label class="field">Email address<input name="email" type="email" autocomplete="email" placeholder="you@example.com" required></label>
+        <label class="field">Password<input name="password" type="password" autocomplete="current-password" placeholder="At least 8 characters" minlength="8" required></label>
+        <p id="auth-error" class="form-error" role="alert"></p>
+        <button id="auth-submit" class="button button-primary auth-submit" type="submit">Create my account <span>↗</span></button>
+      </form>
+      <div class="auth-switch"><span id="auth-switch-copy">Already part of the community?</span> <button id="auth-switch" type="button">Log in</button></div>
+      <div class="auth-note"><span>✳</span> Free to join. Built for people who build.</div>
+    </section>
+  </div>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script src="app.js"></script>
+</body>
+</html>
