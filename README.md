@@ -2,6 +2,8 @@
 
 DevConnect is a small developer community app concept built with HTML, CSS, and vanilla JavaScript. Its warm editorial design uses a CSS-built architectural hero and a project gallery, with the community workspace and interactions running directly in the browser.
 
+**Live demo:** [divanshi046.github.io/devconnect](https://divanshi046.github.io/devconnect/) · **Source:** [github.com/divanshi046/devconnect](https://github.com/divanshi046/devconnect)
+
 ## Run locally
 
 Open `index.html` in a browser, or serve this folder with any static web server. For example, with Python installed:
@@ -72,7 +74,7 @@ This version is static and can be deployed to GitHub Pages:
 2. Open the repository’s **Settings → Pages**.
 3. Choose **Deploy from a branch**, select the branch and `/ (root)` folder, then save.
 
-The page will be available at the GitHub Pages URL shown in that settings panel.
+This repository is published from the `main` branch and `/ (root)` folder. GitHub Pages republishes it after each push to `main`.
 
 ## Notes for extending the project
 
