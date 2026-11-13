@@ -191,7 +191,7 @@ body.light-theme{--bg:#f7f1ec;--panel:#fffaf6;--panel-2:#f4ebe5;--panel-3:#eee1d
   .feature-grid{grid-template-columns:1fr;gap:11px}
   .feature-card:nth-child(2){transform:none}
   .feature-art{height:155px}
-  .feature-card{padding-bottom:13px}
+  .feature-card{padding-bottom:13px;display:block}
   .landing-footer{width:calc(100% - 30px);gap:10px}
   .landing-footer>span:nth-child(2){display:none}
 }
