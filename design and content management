@@ -1,0 +1,34 @@
+# Design and Content Contributions
+
+This document summarizes my contributions to the visual presentation and content organization of **DevConnect**, a developer community project.
+
+Project: [DevConnect](https://github.com/divanshi046/devconnect)  
+Live demo: [divanshi046.github.io/devconnect](https://divanshi046.github.io/devconnect/)
+
+## Visual Design
+
+- Developed a warm blush-and-cream visual direction with editorial typography and a consistent color palette.
+- Designed the landing page presentation, including the headline, supporting copy, navigation, and calls to action.
+- Created the architectural hero illustration with CSS shapes and visual details.
+- Organized feature cards to introduce the community’s core themes: sharing work, meeting developers, and collaborating.
+- Applied the visual style across the community workspace, including feed cards, profile content, project cards, and navigation.
+- Supported responsive layouts and light/dark theme presentation.
+
+## Content Management
+
+- Organized the community feed around developer updates, code snippets, and project posts.
+- Structured profile content such as role, location, bio, GitHub link, skills, achievements, and project details.
+- Added clear labels and supporting copy for the community’s main areas, including Explore, Connections, Messages, and Team Finder.
+- Curated sample developer posts and project descriptions to demonstrate the kinds of content members can share.
+- Maintained consistent text style and content hierarchy across the landing page, feed, profiles, and project sections.
+
+## Project Areas
+
+- `index.html` — landing page, feature content, app shell, and profile form structure
+- `styles.css` — visual presentation, responsive layouts, components, and themes
+- `app.js` — feed content, demo data, page rendering, and interactions
+- `features.js` — team finder, notifications, GitHub profile details, and profile extras
+
+## Note
+
+DevConnect is a browser-based community app prototype. Its sample posts and profiles demonstrate the product’s content features; they are not presented as real user-generated content.
